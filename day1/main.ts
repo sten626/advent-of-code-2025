@@ -1,0 +1,73 @@
+const turnRegex = /([LR])(\d+)/;
+
+export function turn(
+  position: number,
+  direction: string,
+  amount: number
+): [number, number] {
+  let result = position;
+  let passes = Math.floor(amount / 100);
+  amount -= passes * 100;
+
+  if (amount === 0) {
+    return [result, passes];
+  }
+
+  if (direction === "L") {
+    result -= amount;
+    if (position === 0) {
+      passes -= 1;
+    }
+    if (result < 0) {
+      result += 100;
+      passes += 1;
+    } else if (result === 0) {
+      passes += 1;
+    }
+  } else if (direction === "R") {
+    result += amount;
+    if (result >= 100) {
+      result -= 100;
+      passes += 1;
+    } else if (result === 0) {
+      passes += 1;
+    }
+  } else {
+    throw new Error(`Unknown direction: ${direction}`);
+  }
+
+  return [result, passes];
+}
+
+export async function main() {
+  const text = await Deno.readTextFile("day1/input.txt");
+  const lines = text.split("\n");
+  let position = 50;
+  let zerosPart1 = 0;
+  let zerosPart2 = 0;
+  let passes = 0;
+
+  for (const line of lines) {
+    const match = turnRegex.exec(line);
+    if (match) {
+      const turnDirection = match[1];
+      const distance = parseInt(match[2]);
+
+      [position, passes] = turn(position, turnDirection, distance);
+      // console.log(`The dial is rotated ${line} to point at ${position}.`);
+
+      if (position === 0) {
+        zerosPart1 += 1;
+      }
+
+      zerosPart2 += passes;
+    }
+  }
+
+  console.log(`Part 1: ${zerosPart1}`);
+  console.log(`Part 2: ${zerosPart2}`);
+}
+
+if (import.meta.main) {
+  main();
+}

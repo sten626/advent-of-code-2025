@@ -3,7 +3,7 @@ const turnRegex = /([LR])(\d+)/;
 export function turn(
   position: number,
   direction: string,
-  amount: number
+  amount: number,
 ): [number, number] {
   let result = position;
   let passes = Math.floor(amount / 100);

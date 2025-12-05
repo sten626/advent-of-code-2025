@@ -8,7 +8,7 @@ async function run(day: number, useExample: boolean) {
   const solution = await import(modulePath) as {
     solve: (input: string) => void;
   };
-  solution.solve(input);
+  solution.solve(input.trim());
 }
 
 if (import.meta.main) {

@@ -1,5 +1,3 @@
-import { parseArgs } from "@std/cli/parse-args";
-
 interface Range {
   start: number;
   end: number;
@@ -74,15 +72,4 @@ export function solve(input: string) {
   console.log(`Part 1: ${part1Sum}`);
   const part2Sum = part2BadIds.reduce((acc, val) => acc + val, 0);
   console.log(`Part 2: ${part2Sum}`);
-}
-
-if (import.meta.main) {
-  const args = parseArgs(Deno.args, {
-    boolean: ["example"],
-    alias: { e: "example" },
-  });
-  const inputBasename = args.example ? "example.txt" : "input.txt";
-  const inputFilename = `${import.meta.dirname}/${inputBasename}`;
-  const input = await Deno.readTextFile(inputFilename);
-  solve(input);
 }

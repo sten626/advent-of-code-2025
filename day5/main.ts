@@ -32,11 +32,35 @@ function part1(goodIdRanges: Range[], availableIds: number[]): void {
 
 function part2(goodIdRanges: Range[]): void {
   // Merge overlapping ranges first
-  const goodIdCount = goodIdRanges.map((r) => r.max - r.min + 1).reduce(
+  const mergedRanges: Range[] = [];
+  let currentRange: Range | null = null;
+
+  for (const range of goodIdRanges) {
+    if (currentRange === null) {
+      currentRange = { ...range };
+      continue;
+    }
+
+    if (range.min <= currentRange.max) {
+      if (range.max > currentRange.max) {
+        currentRange.max = range.max;
+      }
+
+      continue;
+    }
+
+    mergedRanges.push(currentRange);
+    currentRange = { ...range };
+  }
+
+  if (currentRange !== null) {
+    mergedRanges.push(currentRange);
+  }
+
+  const goodIdCount = mergedRanges.map((r) => r.max - r.min + 1).reduce(
     (a, b) => a + b,
     0,
   );
-  // TODO: Not done yet
   console.log(`Part 2: ${goodIdCount}`);
 }
 

@@ -85,6 +85,22 @@ export function multiply(a: number, b: number): number {
   return a * b;
 }
 
+export function* pairwise<T>(iterable: Iterable<T>): Generator<[T, T]> {
+  const iterator = iterable[Symbol.iterator]();
+  let { value: a, done } = iterator.next();
+
+  while (!done) {
+    const { value: b, done } = iterator.next();
+
+    if (done) {
+      return;
+    }
+
+    yield [a, b];
+    a = b;
+  }
+}
+
 export function range(stop: number): Generator<number>;
 export function range(
   start: number,
@@ -198,4 +214,13 @@ export class DisjointSet<T> {
     this.sizes.set(rootA, sizeA + sizeB);
     this.nSubsets -= 1;
   }
+}
+
+export interface Point2D {
+  x: number;
+  y: number;
+}
+
+export interface Point3D extends Point2D {
+  z: number;
 }

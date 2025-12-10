@@ -1,17 +1,16 @@
-import { getArgs } from "./util.ts";
+import { Solution } from "./solution.ts";
 
-async function run(day: number, useExample: boolean) {
-  const modulePath = `./day${day}/main.ts`;
-  const inputBasename = useExample ? "example.txt" : "input.txt";
-  const inputPath = `./day${day}/${inputBasename}`;
-  const input = await Deno.readTextFile(inputPath);
-  const solution = await import(modulePath) as {
-    solve: (input: string) => void;
+async function run(dirPath: string) {
+  // TODO: Error handling for argument
+  const modulePath = `${dirPath}/main.ts`;
+  const module = (await import(modulePath)) as {
+    default: new (path: string) => Solution;
   };
-  solution.solve(input.replace(/\n$/, "")); // Don't trim here!!
+  const SolutionClass = module.default;
+  const solution = new SolutionClass(dirPath);
+  solution.solve();
 }
 
 if (import.meta.main) {
-  const { day, useExample } = getArgs();
-  await run(day, useExample);
+  await run(Deno.args[0]);
 }

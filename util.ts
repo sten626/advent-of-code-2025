@@ -6,6 +6,14 @@ export function add(a: number, b: number): number {
   return a + b;
 }
 
+export function areArraysEqual<T>(a: T[], b: T[]): boolean {
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  return a.every((v, i) => v === b[i]);
+}
+
 export function* combinations<T>(
   iterable: Iterable<T>,
   r: number
